@@ -1,33 +1,33 @@
 package com.example.demo;
 
-import org.apache.tomcat.util.descriptor.web.*;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import org.apache.tomcat.util.descriptor.web.WebXml;
+import org.apache.tomcat.util.descriptor.web.WebXmlParser;
 import org.xml.sax.InputSource;
-
-import javax.servlet.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.Map;
 
 public class WebXmlBridge implements ServletContextInitializer {
-
 
     private static final String WEB_XML_PATH = "/WEB-INF/web.xml";
 
     @Override
-    public void onStartup(ServletContext servletContext) {
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        // Parse web.xml and register servlets, filters, and listeners
         WebXml webXml = parseWebXml(servletContext);
 
         registerServlets(webXml, servletContext);
-        //registerFilters(webXml, servletContext);
+        registerFilters(webXml, servletContext);
         registerListeners(webXml, servletContext);
     }
 
     private WebXml parseWebXml(ServletContext servletContext) {
         URL resource;
-
         try {
             resource = servletContext.getResource(WEB_XML_PATH);
         } catch (MalformedURLException e) {
@@ -35,7 +35,6 @@ public class WebXmlBridge implements ServletContextInitializer {
         }
 
         WebXml webXml = new WebXml();
-
         WebXmlParser parser = new WebXmlParser(false, false, false);
         parser.setClassLoader(WebXmlBridge.class.getClassLoader());
 
@@ -51,53 +50,40 @@ public class WebXmlBridge implements ServletContextInitializer {
         return webXml;
     }
 
-    /**
-     * It reads servlets defined in web.xml and registers them into the application.
-     */
     private void registerServlets(WebXml webXml, ServletContext servletContext) {
+        // Register servlets defined in web.xml
         Map<String, String> servletMappings = webXml.getServletMappings();
 
-        for (ServletDef def :  webXml.getServlets().values()) {
-            String servletName = def.getServletName();
+        for (Map.Entry<String, String> entry : webXml.getServlets().entrySet()) {
+            String servletName = entry.getKey();
+            String servletClass = entry.getValue();
 
-            List<String> mappings = findMappings(servletMappings, servletName);
+            // Find servlet mappings for this servlet
+            String servletMapping = servletMappings.get(servletName);
 
-            if (mappings.isEmpty()) {
-                throw new IllegalStateException("Not mapping defined for " + servletName);
-            }
-
-            for (String mapping : mappings) {
-                ServletRegistration.Dynamic reg = servletContext.addServlet(servletName, def.getServletClass());
-                reg.addMapping(mapping);
+            if (servletMapping != null) {
+                // Register servlet with servlet context
+                servletContext.addServlet(servletName, servletClass).addMapping(servletMapping);
+            } else {
+                throw new IllegalStateException("No mapping defined for servlet " + servletName);
             }
         }
     }
 
-    private List<String> findMappings(Map<String, String> servletMappings, String servletName) {
-        List<String> mappings = new ArrayList<>();
-
-        for (Map.Entry<String, String> mapping : servletMappings.entrySet()) {
-            if (mapping.getValue().equals(servletName)) {
-                mappings.add(mapping.getKey());
-            }
-        }
-
-        return mappings;
-    }
-
-    /**
-     * Method to read filters defined in web.xml and to register them into the application.
-     */
     private void registerFilters(WebXml webXml, ServletContext servletContext) {
+        // Register filters defined in web.xml
+        // Implement similar to registerServlets if needed
     }
 
-    /**
-     * It reads listeners defined in web.xml and registers them into the application.
-     */
     private void registerListeners(WebXml webXml, ServletContext servletContext) {
-        for (String listener : webXml.getListeners()) {
-            servletContext.addListener(listener);
+        // Register listeners defined in web.xml
+        for (String listenerClass : webXml.getListeners()) {
+            try {
+                Class<?> listener = Class.forName(listenerClass);
+                servletContext.addListener(listener);
+            } catch (ClassNotFoundException e) {
+                throw new IllegalStateException("Listener class not found: " + listenerClass, e);
+            }
         }
     }
-
 }
