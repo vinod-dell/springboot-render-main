@@ -1,4 +1,4 @@
-package com.example.demo.models;
+/*package com.example.demo.models;
 
 public class Post {
     private String title;
@@ -23,4 +23,4 @@ public class Post {
     public String getContent() {
         return content;
     }
-}
+}*/
