@@ -1,3 +1,8 @@
+
+package com.example.demo;
+
+import jakarta.servlet.Servlet;
+import jakarta.servlet.annotation.WebServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
