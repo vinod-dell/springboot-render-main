@@ -11,13 +11,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
-/**
- * Implementation of {@link ServletContextInitializer} to register the servlets, listeners and filters defined
- * in the application's web.xml on startup.
- *
- * TODO servlets' init-params are not supported
- * TODO filters are not registered
- */
 public class WebXmlBridge implements ServletContextInitializer {
 
 
