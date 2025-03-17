@@ -21,7 +21,7 @@ public class WebXmlBridge implements ServletContextInitializer {
         WebXml webXml = parseWebXml(servletContext);
 
         registerServlets(webXml, servletContext);
-        registerFilters(webXml, servletContext);
+        //registerFilters(webXml, servletContext);
         registerListeners(webXml, servletContext);
     }
 
