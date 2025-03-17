@@ -1,4 +1,4 @@
-package com.example;
+/*package com.example;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,4 +20,4 @@ public class MyCustomServlet extends HttpServlet {
         }
         resp.getWriter().write("After thread sleep");
     }
-}
+}*/
