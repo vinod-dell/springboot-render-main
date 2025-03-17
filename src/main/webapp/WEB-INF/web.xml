@@ -10,7 +10,7 @@
     <!-- Custom Servlet Configuration -->
     <servlet>
         <servlet-name>myCustomServlet</servlet-name>
-        <servlet-class>com.example.demo.controllers.MyCustomServlet</servlet-class>
+        <servlet-class>com.example.demo.MyCustomServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
