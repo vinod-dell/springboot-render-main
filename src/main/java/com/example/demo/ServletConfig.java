@@ -1,5 +1,5 @@
 
-package com.example.demo;
+/*package com.example.demo;
 
 import jakarta.servlet.Servlet;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,4 +17,4 @@ public class ServletConfig {
         servletBean.setLoadOnStartup(1); // optional: to ensure the servlet is loaded on startup
         return servletBean;
     }
-}
+}*/
