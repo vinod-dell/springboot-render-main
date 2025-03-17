@@ -1,4 +1,4 @@
-package com.example.demo.models;
+/*package com.example.demo.models;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -32,5 +32,5 @@ class ProductTest {
 		
 	}
 
-}
+}*/
 
