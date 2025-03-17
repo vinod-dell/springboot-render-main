@@ -1,4 +1,4 @@
-package com.example.demo.models;
+/*package com.example.demo.models;
 
 import jakarta.persistence.*;
 
@@ -43,4 +43,4 @@ public class User {
         this.uid = uid;
     }
     
-}
+}*/
