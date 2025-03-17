@@ -6,7 +6,9 @@
          version="4.0">
 
     <display-name>Spring Boot with Custom Servlet</display-name>
-
+<listener>
+        <listener-class>com.example.demo.DemoListener</listener-class>
+    </listener> 
     <!-- Custom Servlet Configuration -->
     <servlet>
         <servlet-name>myCustomServlet</servlet-name>
