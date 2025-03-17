@@ -1,8 +1,6 @@
-package eu.arima.springbootwithwebxml;
+package com.example.demo;
 
 import org.apache.tomcat.util.descriptor.web.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.xml.sax.InputSource;
 
@@ -22,7 +20,6 @@ import java.util.*;
  */
 public class WebXmlBridge implements ServletContextInitializer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebXmlBridge.class);
 
     private static final String WEB_XML_PATH = "/WEB-INF/web.xml";
 
@@ -80,9 +77,6 @@ public class WebXmlBridge implements ServletContextInitializer {
                 ServletRegistration.Dynamic reg = servletContext.addServlet(servletName, def.getServletClass());
                 reg.addMapping(mapping);
             }
-
-            LOGGER.info("Registered servlet with name [{}] Class[{}] Mappings[{}]", servletName, def.getServletClass(),
-                    mappings);
         }
     }
 
@@ -102,7 +96,6 @@ public class WebXmlBridge implements ServletContextInitializer {
      * Method to read filters defined in web.xml and to register them into the application.
      */
     private void registerFilters(WebXml webXml, ServletContext servletContext) {
-        LOGGER.info("Filters are not supported");
     }
 
     /**
@@ -111,7 +104,6 @@ public class WebXmlBridge implements ServletContextInitializer {
     private void registerListeners(WebXml webXml, ServletContext servletContext) {
         for (String listener : webXml.getListeners()) {
             servletContext.addListener(listener);
-            LOGGER.info("Registered listener class [{}]", listener);
         }
     }
 
