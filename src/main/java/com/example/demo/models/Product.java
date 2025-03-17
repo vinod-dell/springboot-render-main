@@ -1,4 +1,4 @@
-package com.example.demo.models;
+/*package com.example.demo.models;
 
 public class Product {
     private double unitPrice;
@@ -22,4 +22,4 @@ public class Product {
         this.inven -= num;
         return this.unitPrice*num;
     }
-}
+}*/
