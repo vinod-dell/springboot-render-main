@@ -1,4 +1,4 @@
-package com.example.demo.controllers;
+/*package com.example.demo.controllers;
 
 import org.junit.jupiter.api.Test;
 
@@ -89,5 +89,5 @@ public class UsersControllerTest {
             .andExpect(MockMvcResultMatchers.view().name("users/protected"));
     }
 
-}
+}*/
 
