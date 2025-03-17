@@ -5,6 +5,7 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import org.apache.tomcat.util.descriptor.web.WebXml;
 import org.apache.tomcat.util.descriptor.web.WebXmlParser;
+import org.apache.tomcat.util.descriptor.web.ServletDef;
 import org.xml.sax.InputSource;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,11 +19,10 @@ public class WebXmlBridge implements ServletContextInitializer {
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        // Parse web.xml and register servlets, filters, and listeners
         WebXml webXml = parseWebXml(servletContext);
 
         registerServlets(webXml, servletContext);
-        registerFilters(webXml, servletContext);
+        registerFilters(webXml, servletContext);  // Implement if necessary
         registerListeners(webXml, servletContext);
     }
 
@@ -51,14 +51,17 @@ public class WebXmlBridge implements ServletContextInitializer {
     }
 
     private void registerServlets(WebXml webXml, ServletContext servletContext) {
-        // Register servlets defined in web.xml
-        Map<String, String> servletMappings = webXml.getServletMappings();
+        Map<String, ServletDef> servletDefs = webXml.getServlets();
 
-        for (Map.Entry<String, String> entry : webXml.getServlets().entrySet()) {
+        for (Map.Entry<String, ServletDef> entry : servletDefs.entrySet()) {
             String servletName = entry.getKey();
-            String servletClass = entry.getValue();
+            ServletDef servletDef = entry.getValue();
+
+            // Extract the servlet class
+            String servletClass = servletDef.getServletClass();
 
             // Find servlet mappings for this servlet
+            Map<String, String> servletMappings = webXml.getServletMappings();
             String servletMapping = servletMappings.get(servletName);
 
             if (servletMapping != null) {
@@ -70,19 +73,16 @@ public class WebXmlBridge implements ServletContextInitializer {
         }
     }
 
-    private void registerFilters(WebXml webXml, ServletContext servletContext) {
-        // Register filters defined in web.xml
-        // Implement similar to registerServlets if needed
-    }
-
     private void registerListeners(WebXml webXml, ServletContext servletContext) {
-        // Register listeners defined in web.xml
-        for (String listenerClass : webXml.getListeners()) {
+        for (String listenerClassName : webXml.getListeners()) {
             try {
-                Class<?> listener = Class.forName(listenerClass);
-                servletContext.addListener(listener);
-            } catch (ClassNotFoundException e) {
-                throw new IllegalStateException("Listener class not found: " + listenerClass, e);
+                // Load the listener class dynamically
+                Class<?> listenerClass = Class.forName(listenerClassName);
+
+                // Instantiate the listener and add it to the context
+                servletContext.addListener(listenerClass.getDeclaredConstructor().newInstance());
+            } catch (ClassNotFoundException | ReflectiveOperationException e) {
+                throw new IllegalStateException("Error adding listener: " + listenerClassName, e);
             }
         }
     }
